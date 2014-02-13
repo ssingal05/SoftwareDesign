@@ -187,7 +187,7 @@ def find_all_ORFs(dna):
     
     # Iterate through each of three offset positions of dna sequence
     for i in range(3):
-        allORFs.extend(find_all_ORFs_oneframe(dna[i:len(dna)]))
+        allORFs.extend(find_all_ORFs_oneframe(dna[i:]))
         
     # Return all ORFs found among all offsets
     return allORFs

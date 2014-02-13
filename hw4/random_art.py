@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 """
 Created on Tue Feb 11 11:34:57 2014
-
+firework
 @author: pruvolo
 """
 
 # you do not have to use these particular modules, but they may help
 from random import randint
 import Image
+variables = ['x','y']
+functions = ['sin_pi','cos_pi','prod','arthmean','geommean']
 
 def build_random_function(min_depth, max_depth):
-    # your doc string goes here
-
+    func = ''
     # your code goes here
 
 def evaluate_random_function(f, x, y):
