@@ -1,0 +1,14 @@
+*************************
+*  Siddharth Singal	*
+*  2/11/14		*
+*  Software Design	*
+*  Homework 3          	*
+*************************
+
+This file is to explain my findings after running the amino acids I found from the Salmonella DNA on protein-BLAST. I found several proteins from the DNA, such as:
+	-needle complex assembly protein
+	-virulence-associated secretory protein
+	-surface presentation of antigens protein
+	-etc.
+
+There are many more, but let's move on. ALl of the genes belong to the genus Salomonella, but more specifically all of the genes belong to Salmonella enterica. There are several serovars of Salmonella enterica, but no one serovar seems to be dominant in the p-BLAST. I saw Typhimurium, Paratyphi, Newport, and others.
