@@ -11,8 +11,8 @@ import math
 import Image
 
 # Make a list of all available functions and variables
-functions = ['sin_pi','cos_pi','sqr','prod','avg','a','b']
-variables = ['x','y']
+functions = ['sin_pi','cos_pi','sqr','prod','avg','a','b','c']
+variables = ['x','y','z']
 
 def build_random_function(min_depth, max_depth):
     """
@@ -35,7 +35,7 @@ def build_random_function(min_depth, max_depth):
         if i<3:
             return [functions[i],build_random_function(min_depth-1,max_depth-1)]
         else:
-            return [functions[i],build_random_function(min_depth-1,max_depth-1),build_random_function(min_depth-1,max_depth-1)]
+            return [functions[i],build_random_function(min_depth-1,max_depth-1),build_random_function(min_depth-1,max_depth-1),build_random_function(min_depth-1,max_depth-1)]
             
     # If we are not required to have more nested functions and...
     else:
@@ -50,20 +50,20 @@ def build_random_function(min_depth, max_depth):
                 if i<3:
                     return [functions[i],build_random_function(min_depth,max_depth-1)]
                 else:
-                    return [functions[i],build_random_function(min_depth,max_depth-1),build_random_function(min_depth,max_depth-1)]
+                    return [functions[i],build_random_function(min_depth,max_depth-1),build_random_function(min_depth,max_depth-1),build_random_function(min_depth,max_depth-1)]
             # ***or end with a variable
             else:
-                i = randint(0,1)
+                i = randint(0,2)
                 return [variables[i]]
                 
         # ...if we aren'y allowed to have more nested functions, then end with
         # a variable
         else:
-            i = randint(0,1)
+            i = randint(0,2)
             return [variables[i]]
 
     
-def evaluate_random_function(f, x, y):
+def evaluate_random_function(f, x, y, z):
     """
     evaulate_random_function will evaluate a given function with the given
     input variables
@@ -71,6 +71,7 @@ def evaluate_random_function(f, x, y):
     inputs:     f: The function
                 x: The value of the x variables in the function
                 y: The value of the y variables in the function
+                z: The value of the z variables in the function
                 
     outputs:    A number representing the value of the evaluated function
     """
@@ -82,33 +83,39 @@ def evaluate_random_function(f, x, y):
         if f[0]=='x':
             return 1.0*x
         # Return the y value for y variables
-        else:
+        if f[0]=='y':
             return 1.0*y
+        # Return the z value for z variables
+        else:
+            return 1.0*z
     # If there is more than one value in this list representing the function,
     # then we need to evaluate this function based on the following mathematical
     # operations
     else:
         # Take the sine of the function
         if f[0] == 'sin_pi':
-            return math.sin(math.pi*evaluate_random_function(f[1],x,y))
+            return math.sin(math.pi*evaluate_random_function(f[1],x,y,z))
         # Take the cosine of the function
         elif f[0] == 'cos_pi':
-            return math.cos(math.pi*evaluate_random_function(f[1],x,y))
+            return math.cos(math.pi*evaluate_random_function(f[1],x,y,z))
         # Square the function
         elif f[0] == 'sqr':
-            return math.pow(evaluate_random_function(f[1],x,y),2)
+            return math.pow(evaluate_random_function(f[1],x,y,z),2)
         # Find the product of the functions
         elif f[0] == 'prod':
-            return evaluate_random_function(f[1],x,y)*evaluate_random_function(f[2],x,y)
+            return evaluate_random_function(f[1],x,y,z)*evaluate_random_function(f[2],x,y,z)*evaluate_random_function(f[3],x,y,z)
         # Return only the first value of the function
         elif f[0] == 'a':
-            return evaluate_random_function(f[1],x,y)
+            return evaluate_random_function(f[1],x,y,z)
         # Return only the second value of the function
         elif f[0] == 'b':
-            return evaluate_random_function(f[2],x,y)
+            return evaluate_random_function(f[2],x,y,z)
+        # Return only the third value of the function
+        elif f[0] == 'c':
+            return evaluate_random_function(f[3],x,y,z)
         # Find the average of the functions
         else:
-            return (evaluate_random_function(f[1],x,y)+evaluate_random_function(f[2],x,y))/2
+            return (evaluate_random_function(f[1],x,y,z)+evaluate_random_function(f[2],x,y,z)+evaluate_random_function(f[3],x,y,z))/3
             
 
 def remap_interval(val, input_interval_start, input_interval_end, output_interval_start, output_interval_end):
@@ -135,40 +142,57 @@ def remap_interval(val, input_interval_start, input_interval_end, output_interva
 # Main method
 if __name__ == "__main__":
     
+    # Set minimum and maximum depths
+    mindep = 5
+    maxdep = 12
+    
     # Set image size
     imgwidth = 350;
     imgheight = 350;
     
     # Create functions for red, green, and blue channels
-    redf=build_random_function(5,10)
-    greenf=build_random_function(8,12)
-    bluef=build_random_function(3,7)
+    redf=build_random_function(8,8)
+    greenf=build_random_function(8,8)
+    bluef=build_random_function(8,8)
     
-    # Create a new image and set it up for editing
-    im = Image.new("RGB",(imgwidth,imgheight))
-    edit = im.load()
+    print redf
+    print greenf
+    print bluef    
     
-    # Traverse through every pixel
-    for i in range(imgwidth):
-        for j in range(imgheight):
+    for frame in range(200):
+        # Create a new image and set it up for editing
+        im = Image.new("RGB",(imgwidth,imgheight))
+        edit = im.load()
+        
+        
+        
+        # Traverse through every pixel
+        for i in range(imgwidth):
+            print frame,i
+            for j in range(imgheight):
             
-            # Find a scaled value from -1 to 1 to plug into function based on
-            # pixel position
-            fscalei=remap_interval(i,0,imgwidth-1,-1,1)
-            fscalej=remap_interval(j,0,imgheight-1,-1,1)
-            
-            # Find unscaled value of R, G, and B values
-            unscaledr = evaluate_random_function(redf,fscalei,fscalej)
-            unscaledg = evaluate_random_function(greenf,fscalei,fscalej)
-            unscaledb = evaluate_random_function(bluef,fscalei,fscalej)
-            
-            # Find correct R, G, and B values for current pixel
-            r=int(remap_interval(unscaledr,-1,1,0,255))
-            g=int(remap_interval(unscaledg,-1,1,0,255))
-            b=int(remap_interval(unscaledb,-1,1,0,255))
-            
-            # Set the color of the current pixel
-            edit[i,j]=(r,g,b)
-    
-    # Save the image        
-    im.save("pic4.png")
+                # Find a scaled value from -1 to 1 to plug into function based on
+                # pixel position
+                fscalei=remap_interval(i,0,imgwidth-1,-1,1)
+                fscalej=remap_interval(j,0,imgheight-1,-1,1)
+                fscaleframe=remap_interval(frame,0,199,-1,1)
+                
+                # Find unscaled value of R, G, and B values
+                unscaledr = evaluate_random_function(redf,fscalei,fscalej,fscaleframe)
+                unscaledg = evaluate_random_function(greenf,fscalei,fscalej,fscaleframe)
+                unscaledb = evaluate_random_function(bluef,fscalei,fscalej,fscaleframe)
+                
+                # Find correct R, G, and B values for current pixel
+                r=int(remap_interval(unscaledr,-1,1,0,255))
+                g=int(remap_interval(unscaledg,-1,1,0,255))
+                b=int(remap_interval(unscaledb,-1,1,0,255))
+                
+                #if j==100:
+                #    print fscalei,fscalej,fscaleframe,r,g,b
+                
+                # Set the color of the current pixel
+                edit[i,j]=(r,g,b)
+                 
+        # Save the image        
+        im.save("vid2/frame%03d.png" % frame)
+        
