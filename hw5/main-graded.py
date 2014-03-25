@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-
 Created on Mon Mar  3 02:53:21 2014
 
 @author: james and sidd
-
 This program will predict what the next song of an artist will be given his past songs
 """
 
